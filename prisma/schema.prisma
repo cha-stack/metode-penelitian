@@ -1,0 +1,73 @@
+// Prisma schema for Kost Al Kasyaaf
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum StatusKamar {
+  TERISI
+  KOSONG
+}
+
+enum StatusPenghuni {
+  AKTIF
+  NONAKTIF
+}
+
+enum StatusPembayaran {
+  LUNAS
+  MENUNGGAK
+  BELUM_BAYAR
+}
+
+model User {
+  id        String   @id @default(cuid())
+  nama      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Kamar {
+  id         String      @id @default(cuid())
+  nomorKamar String      @unique
+  harga      Int
+  status     StatusKamar @default(KOSONG)
+  penghuni   Penghuni[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Penghuni {
+  id            String         @id @default(cuid())
+  nama          String
+  noHp          String
+  alamat        String
+  tanggalMasuk  DateTime
+  tanggalKeluar DateTime?
+  status        StatusPenghuni @default(AKTIF)
+  kamarId       String
+  kamar         Kamar          @relation(fields: [kamarId], references: [id])
+  pembayaran    Pembayaran[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Pembayaran {
+  id           String           @id @default(cuid())
+  penghuniId   String
+  penghuni     Penghuni         @relation(fields: [penghuniId], references: [id])
+  jumlah       Int
+  tanggalBayar DateTime?
+  jatuhTempo   DateTime
+  status       StatusPembayaran @default(BELUM_BAYAR)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
