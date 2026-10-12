@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 // Daftar menu navigasi admin
 const menuItems = [
@@ -54,9 +55,18 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 min-h-screen">
+    <>
+      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:hidden">
+        <span className="font-bold tracking-tight text-slate-900">Kost Al Kasyaaf</span>
+        <button type="button" onClick={() => setOpen(!open)} aria-label={open ? "Tutup menu" : "Buka menu"} aria-expanded={open} className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50">
+          {open ? <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18 18 6M6 6l12 12" /></svg> : <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>}
+        </button>
+      </div>
+      {open && <button type="button" aria-label="Tutup menu" onClick={() => setOpen(false)} className="fixed inset-0 z-30 bg-slate-950/50 md:hidden" />}
+    <aside className={`fixed inset-y-0 left-0 z-40 flex min-h-screen w-72 shrink-0 flex-col bg-slate-900 text-slate-100 transition-transform duration-200 md:sticky md:top-0 md:w-64 md:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}>
       {/* Brand Header */}
       <div className="p-6 border-b border-slate-800">
         <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
@@ -77,6 +87,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => setOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                 isActive
                   ? "bg-emerald-600 text-white shadow-sm"
@@ -103,5 +114,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

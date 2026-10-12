@@ -43,7 +43,7 @@ export default async function PenghuniPage() {
 
       {/* Ringkasan & Tombol Tambah */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="grid grid-cols-3 gap-3 w-full sm:w-auto">
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-3 w-full sm:w-auto">
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <p className="text-xs text-slate-500 font-medium">Total Terdata</p>
             <p className="text-xl font-bold text-slate-800 mt-1">{totalPenghuni}</p>
