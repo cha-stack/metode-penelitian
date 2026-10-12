@@ -1,6 +1,6 @@
 export default function Navbar({ title }: { title?: string }) {
   return (
-    <header className="sticky top-0 z-10 flex min-h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:px-6 lg:px-8">
+    <header className="flex min-h-16 items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:px-6 md:sticky md:top-0 md:z-10 lg:px-8">
       <div>
         <h2 className="text-base font-bold leading-tight text-slate-800 sm:text-lg">{title || "Dashboard Pengelola"}</h2>
       </div>
