@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { createKamar } from "../actions";
+import { StatusKamar } from "@prisma/client";
 
 export default function TambahKamarPage() {
   return (
