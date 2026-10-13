@@ -2,7 +2,7 @@ import Sidebar from "@/components/Sidebar";
 import { redirect } from "next/navigation";
 import { hasSession } from "@/lib/auth";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
