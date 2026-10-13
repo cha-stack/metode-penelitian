@@ -10,9 +10,9 @@ function signature(value: string) {
 }
 
 export function validCredentials(email: string, password: string) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  return Boolean(adminEmail && adminPassword && email.toLowerCase() === adminEmail.toLowerCase() && password === adminPassword);
+  const adminEmail = process.env.ADMIN_EMAIL?.trim();
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim();
+  return Boolean(adminEmail && adminPassword && email.trim().toLowerCase() === adminEmail.toLowerCase() && password === adminPassword);
 }
 
 export async function startSession(email: string) {
