@@ -20,10 +20,20 @@ export async function createPenghuni(formData: FormData) {
 
   const tanggalMasuk = new Date(tanggalMasukStr);
 
+  const kamar = await prisma.kamar.findUnique({ where: { id: kamarId } });
+  if (!kamar || kamar.status !== StatusKamar.KOSONG) {
+    throw new Error("Kamar ini sudah terisi atau tidak tersedia. Muat ulang halaman dan pilih kamar kosong.");
+  }
+
   // Jalankan transaksi database:
   // 1. Simpan data penghuni baru
   // 2. Jika penghuni berstatus AKTIF, otomatis ubah status kamar tersebut menjadi TERISI
   await prisma.$transaction(async (tx) => {
+    const kamarTersedia = await tx.kamar.findUnique({ where: { id: kamarId } });
+    const penghuniAktifDiKamar = await tx.penghuni.findFirst({ where: { kamarId, status: StatusPenghuni.AKTIF } });
+    if (!kamarTersedia || kamarTersedia.status !== StatusKamar.KOSONG || penghuniAktifDiKamar) {
+      throw new Error("Kamar ini sudah terisi atau tidak tersedia.");
+    }
     await tx.penghuni.create({
       data: {
         nama,
@@ -46,6 +56,7 @@ export async function createPenghuni(formData: FormData) {
   // Revalidate halaman penghuni & kamar agar data sinkron seketika
   revalidatePath("/penghuni");
   revalidatePath("/kamar");
+  revalidatePath("/dashboard");
   redirect("/penghuni");
 }
 
@@ -78,6 +89,10 @@ export async function updatePenghuni(id: string, formData: FormData) {
   const kamarLamaId = penghuniLama.kamarId;
 
   await prisma.$transaction(async (tx) => {
+    if (kamarLamaId !== kamarIdBaru) {
+      const penghuniAktifDiKamarBaru = await tx.penghuni.findFirst({ where: { kamarId: kamarIdBaru, status: StatusPenghuni.AKTIF } });
+      if (penghuniAktifDiKamarBaru) throw new Error("Kamar tujuan sudah ditempati penghuni aktif.");
+    }
     // 1. Update data penghuni
     await tx.penghuni.update({
       where: { id },
@@ -145,6 +160,7 @@ export async function updatePenghuni(id: string, formData: FormData) {
 
   revalidatePath("/penghuni");
   revalidatePath("/kamar");
+  revalidatePath("/dashboard");
   redirect("/penghuni");
 }
 
@@ -159,16 +175,10 @@ export async function deletePenghuni(id: string) {
     throw new Error("Data penghuni tidak ditemukan.");
   }
 
-  // Pengaman: Jika sudah memiliki transaksi pembayaran, sebaiknya status di-NONAKTIF-kan daripada dihapus permanen
-  if (penghuni.pembayaran.length > 0) {
-    throw new Error(
-      "Penghuni ini memiliki riwayat pembayaran. Untuk menjaga catatan keuangan, ubah status menjadi NONAKTIF alih-alih menghapus."
-    );
-  }
-
   const kamarId = penghuni.kamarId;
 
   await prisma.$transaction(async (tx) => {
+    await tx.pembayaran.deleteMany({ where: { penghuniId: id } });
     await tx.penghuni.delete({
       where: { id },
     });
@@ -191,4 +201,6 @@ export async function deletePenghuni(id: string) {
 
   revalidatePath("/penghuni");
   revalidatePath("/kamar");
+  revalidatePath("/dashboard");
+  revalidatePath("/pembayaran");
 }

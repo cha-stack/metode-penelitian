@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { logout } from "@/app/logout/actions";
 
 // Daftar menu navigasi admin
 const menuItems = [
@@ -107,10 +108,11 @@ export default function Sidebar() {
           <div className="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white text-xs">
             PK
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold text-slate-200">Pemilik Kos</p>
-            <p className="text-[11px] text-slate-400">admin@alkasyaaf.com</p>
+            <p className="text-[11px] text-slate-400">Administrator</p>
           </div>
+          <form action={logout}><button className="rounded-md px-2 py-1 text-xs text-slate-300 hover:bg-slate-800 hover:text-white">Keluar</button></form>
         </div>
       </div>
     </aside>

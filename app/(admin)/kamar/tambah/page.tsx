@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { createKamar } from "../actions";
-import { StatusKamar } from "@prisma/client";
 
 export default function TambahKamarPage() {
   return (
@@ -69,11 +68,10 @@ export default function TambahKamarPage() {
             <select
               id="status"
               name="status"
-              defaultValue={StatusKamar.KOSONG}
+              defaultValue="KOSONG"
               className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
             >
               <option value={StatusKamar.KOSONG}>KOSONG (Belum ada penghuni)</option>
-              <option value={StatusKamar.TERISI}>TERISI (Sudah ada penghuni)</option>
             </select>
             <p className="text-xs text-slate-400 mt-1">
               Biasanya kamar baru berstatus KOSONG sampai penghuni didaftarkan.

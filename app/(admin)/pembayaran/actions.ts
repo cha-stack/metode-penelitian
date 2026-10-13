@@ -28,6 +28,7 @@ export async function buatTagihanBulanIni() {
     }
   }
   revalidatePath("/pembayaran");
+  revalidatePath("/dashboard");
 }
 
 export async function catatPembayaran(formData: FormData) {

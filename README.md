@@ -14,6 +14,18 @@ pnpm dev
 bun dev
 ```
 
+### Login admin
+
+Buat file `.env.local` di folder proyek, lalu isi variabel berikut. Gunakan kata sandi dan rahasia acak milik Anda sendiri; jangan commit file `.env.local`.
+
+```env
+ADMIN_EMAIL=alamat-email-admin
+ADMIN_PASSWORD=kata-sandi-kuat
+AUTH_SECRET=rahasia-acak-minimal-32-karakter
+```
+
+Buka `/login` untuk masuk. Sesi admin berlaku selama 8 jam. Database tetap menggunakan `DATABASE_URL` dan `DIRECT_URL` yang sudah ada di `.env`.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.

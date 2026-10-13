@@ -1,10 +1,13 @@
 import Sidebar from "@/components/Sidebar";
+import { redirect } from "next/navigation";
+import { hasSession } from "@/lib/auth";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  if (!(await hasSession())) redirect("/login");
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 md:flex-row">
       {/* Sidebar Navigasi Kiri */}

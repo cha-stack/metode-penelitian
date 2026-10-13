@@ -13,7 +13,7 @@ export default function DeletePenghuniButton({
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    if (confirm(`Apakah Anda yakin ingin menghapus data penghuni ${nama}?`)) {
+    if (confirm(`Hapus data penghuni ${nama} beserta seluruh tagihan dan riwayat pembayarannya? Tindakan ini tidak bisa dibatalkan.`)) {
       startTransition(async () => {
         try {
           await deletePenghuni(id);

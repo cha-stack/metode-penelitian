@@ -9,7 +9,7 @@ import { StatusKamar } from "@prisma/client";
 export async function createKamar(formData: FormData) {
   const nomorKamar = formData.get("nomorKamar") as string;
   const harga = parseInt(formData.get("harga") as string, 10);
-  const status = (formData.get("status") as StatusKamar) || StatusKamar.KOSONG;
+  const status = StatusKamar.KOSONG;
 
   if (!nomorKamar || isNaN(harga)) {
     throw new Error("Nomor kamar dan harga wajib diisi.");
@@ -42,7 +42,7 @@ export async function createKamar(formData: FormData) {
 export async function updateKamar(id: string, formData: FormData) {
   const nomorKamar = formData.get("nomorKamar") as string;
   const harga = parseInt(formData.get("harga") as string, 10);
-  const status = formData.get("status") as StatusKamar;
+  const status = formData.get("status") === StatusKamar.TERISI ? StatusKamar.TERISI : StatusKamar.KOSONG;
 
   if (!nomorKamar || isNaN(harga)) {
     throw new Error("Nomor kamar dan harga wajib diisi.");
@@ -55,6 +55,14 @@ export async function updateKamar(id: string, formData: FormData) {
 
   if (existingKamar && existingKamar.id !== id) {
     throw new Error(`Kamar nomor ${nomorKamar} sudah digunakan kamar lain.`);
+  }
+
+  if (status === StatusKamar.TERISI) {
+    const penghuniAktif = await prisma.penghuni.findFirst({ where: { kamarId: id, status: "AKTIF" } });
+    if (!penghuniAktif) throw new Error("Status TERISI hanya bisa dipilih jika kamar memiliki penghuni aktif.");
+  } else {
+    const penghuniAktif = await prisma.penghuni.findFirst({ where: { kamarId: id, status: "AKTIF" } });
+    if (penghuniAktif) throw new Error("Kamar masih ditempati penghuni aktif. Ubah status penghuni terlebih dahulu.");
   }
 
   await prisma.kamar.update({
