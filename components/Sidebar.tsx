@@ -44,7 +44,7 @@ const menuItems = [
     ),
   },
   {
-    name: "Laporan",
+    name: "Laporan Keuangan",
     href: "/laporan",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
