@@ -46,3 +46,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### Pengiriman pengingat WhatsApp via Fonnte
+
+Isi `FONNTE_TOKEN` di `.env.local` untuk lokal, lalu tambahkan variabel yang sama di Vercel (Production/Preview sesuai kebutuhan). Token tersedia dari dashboard Fonnte dan tidak boleh dimasukkan ke source code atau dibagikan. Hubungkan perangkat WhatsApp di Fonnte terlebih dahulu. Tombol **Kirim pesan** mengirimkan pengingat ke antrean Fonnte dari server; notifikasi berhasil berarti Fonnte menerima antrean, bukan konfirmasi bahwa penerima telah membaca pesan.
